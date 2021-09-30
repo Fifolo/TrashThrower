@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class CharacterMovement : MonoBehaviour
 {
     #region Editor Exposed Fields
-    [Range(1f, 100f)]
+    [Range(1f, 30f)]
     [SerializeField] private float movementSpeed = 5f;
+    [Range(1f, 10f)]
+    [SerializeField] private float jumpControlSpeed = 2f;
     [Range(1f, 350f)]
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float jumpHeight = 3f;
@@ -18,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
     private Transform groundCheck;
     private LayerMask groundMask;
     private bool isGrounded;
-    private float groundDistance = 0.2f;
+    private float groundDistance = 0.15f;
     private Vector3 velocity;
 
     private CharacterController characterController;
@@ -62,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2.5f;
+            velocity.y = -1.5f;
         }
 
         ApplyGravity();
@@ -82,7 +85,9 @@ public class CharacterMovement : MonoBehaviour
         float sideInput = inputVector.x;
         float forwardInput = inputVector.y;
         Vector3 movementVector = transform.right * sideInput + transform.forward * forwardInput;
-        characterController.Move(movementVector * movementSpeed * Time.deltaTime);
+
+        if(isGrounded) characterController.Move(movementVector * movementSpeed * Time.deltaTime);
+        else characterController.Move(movementVector * jumpControlSpeed * Time.deltaTime);
     }
 
     public void RotateCharacter(float xInput) => characterTransform.Rotate(Vector3.up * xInput * rotationSpeed * Time.deltaTime);
