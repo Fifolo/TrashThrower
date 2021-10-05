@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Singleton : MonoBehaviour
+public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static T Instance { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Awake()
     {
-        
+        if (Instance == null) Instance = (T)this;
+        else
+        {
+            Debug.LogWarning($"{name} => Trying to instantiate second instance of singleton");
+        }
+    }
+    protected virtual void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
 }
