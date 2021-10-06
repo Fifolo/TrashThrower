@@ -6,15 +6,24 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private GameObject[] managerPrefabs;
+    [SerializeField] private GameDifficulty gameDifficulty = GameDifficulty.Easy;
+    public GameDifficulty Game_Difficulty { get { return gameDifficulty; } }
 
     #region Instance Variables
     private List<GameObject> instantiatedManagers;
     public delegate void StateGameChange(GameState from, GameState to);
     public event StateGameChange OnGameStateChange;
-    private string currentSceneName = "Boot";
-    private string previousSceneName;
+
+    private int currentSceneIndex = 0;
+    private int previousSceneIndex;
     public GameState currentState { get; private set; }
     private Transform gameManagerTransform;
+    public enum GameDifficulty
+    {
+        Easy,
+        Medium,
+        Hard
+    }
     public enum GameState
     {
         Boot,
@@ -33,7 +42,7 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         gameManagerTransform = transform;
         InitializeManagers();
-        LoadScene("MainMenu");
+        LoadScene(1);
     }
     #endregion
 
@@ -65,46 +74,52 @@ public class GameManager : Singleton<GameManager>
                 Time.timeScale = 1f;
                 break;
         }
-
         currentState = nextState;
         OnGameStateChange?.Invoke(previousState, currentState);
     }
 
-    public void StartGame() => LoadScene("MyCity");
+    public void StartGame() => LoadScene(2);
     public void ExitGame() => Application.Quit();
     public void ResumeGame() => ChangeGameState(GameState.Playing);
     public void PauseGame() => ChangeGameState(GameState.Pause);
-    public void GoToMainMenu() => LoadScene("MainMenu");
+    public void GoToMainMenu() => LoadScene(1);
 
     #region Scene Management
-    private void LoadScene(string newSceneName)
+    private void LoadScene(int sceneIndex)
     {
-        if (SceneManager.GetSceneByName(newSceneName) != null)
+        if (SceneManager.GetSceneByBuildIndex(sceneIndex) != null)
         {
-            AsyncOperation ao = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
+            AsyncOperation ao = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
             ao.completed += OnSceneLoadComplete;
-            previousSceneName = currentSceneName;
-            currentSceneName = newSceneName;
+
+            previousSceneIndex = currentSceneIndex;
+            currentSceneIndex = sceneIndex;
         }
     }
     private void OnSceneLoadComplete(AsyncOperation obj)
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(currentSceneName));
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(currentSceneIndex));
 
-        switch (currentSceneName)
+        switch (currentSceneIndex)
         {
-            case "MyCity":
-                ChangeGameState(GameState.Playing);
+            //boot loaded
+            case 0:
                 break;
-            case "MainMenu":
+            //main menu loaded
+            case 1:
                 ChangeGameState(GameState.MainMenu);
                 break;
+            //play scene loaded
+            default:
+                ChangeGameState(GameState.Playing);
+                break;
         }
-        UnloadScene(previousSceneName);
+
+        UnloadScene(previousSceneIndex);
     }
-    private void UnloadScene(string sceneName)
+    private void UnloadScene(int sceneIndex)
     {
-        AsyncOperation ao = SceneManager.UnloadSceneAsync(previousSceneName);
+        AsyncOperation ao = SceneManager.UnloadSceneAsync(sceneIndex);
         ao.completed += OnSceneUnloadComplete;
     }
     private void OnSceneUnloadComplete(AsyncOperation obj)

@@ -23,7 +23,8 @@ public class TrashCan : MonoBehaviour
         {
             TotalThrashAmount += 1;
             TrashInCanAmount += 1;
-            trash.transform.SetParent(trashCanTransform);
+            //trash.transform.SetParent(trashCanTransform);
+            TrashPool.Instance.ReturnObject(trash);
             OnTrashPutInCan?.Invoke();
         }
         else Debug.Log($"Wrong type of thrash, thrash can = {trashCanType}, thrash = {trash.Trash_Type}");

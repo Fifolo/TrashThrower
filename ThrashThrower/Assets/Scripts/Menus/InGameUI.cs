@@ -11,6 +11,7 @@ public class InGameUI : Singleton<InGameUI>
     [SerializeField] private TextMeshProUGUI differentText;
     [SerializeField] private TextMeshProUGUI totalBagWeightText;
     [SerializeField] private TextMeshProUGUI totalTrashAmountText;
+    [SerializeField] private TextMeshProUGUI scoreText;
     #endregion
 
     #region Instance Variables
@@ -18,6 +19,7 @@ public class InGameUI : Singleton<InGameUI>
     private TrashPicker trashPicker;
     public int TotalTrashAmount { get; private set; }
     public float TotalBagWeight { get; private set; }
+    public int Score { get; private set; } 
     #endregion
 
     #region Mono Behaviour
@@ -27,11 +29,32 @@ public class InGameUI : Singleton<InGameUI>
         trashCans = new List<TrashCan>();
         TotalTrashAmount = 0;
         TotalBagWeight = 0;
+        Score = 0;
     }
     private void Start()
     {
+        SubscribeToEvents();
         InitializeCans();
         InitializeTrashPicker(GameObject.Find("Player").GetComponentInChildren<TrashPicker>());
+    }
+
+    private void SubscribeToEvents()
+    {
+        NpcController.OnNpcDeath += NpcController_OnNpcDeath;
+    }
+
+    private void NpcController_OnNpcDeath(NpcData.NPC_Type npc_Type)
+    {
+        switch (npc_Type)
+        {
+            case NpcData.NPC_Type.Bad:
+                Score += 1;
+                break;
+            case NpcData.NPC_Type.Good:
+                Score -= 1;
+                break;
+        }
+        scoreText.text = Score.ToString();
     }
 
     protected override void OnDestroy()
@@ -131,6 +154,8 @@ public class InGameUI : Singleton<InGameUI>
         {
             can.OnTrashPutInCan -= OnTrashPutInCan;
         }
+
+        NpcController.OnNpcDeath -= NpcController_OnNpcDeath;
 
         if (trashPicker != null)
         {

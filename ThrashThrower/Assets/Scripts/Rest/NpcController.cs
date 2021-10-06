@@ -5,14 +5,17 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class NpcController : MonoBehaviour, IDamagable
 {
+    public delegate void NpcAction(NpcData.NPC_Type npc_Type);
+    public static event NpcAction OnNpcDeath;
+
     #region Editor Exposed Fields
     [SerializeField] private NpcData npcData;
     #endregion
 
     #region Instance Variables
-    public NpcData.NPC_Type npc_Type { get { return npcData.Npc_Type; } }
     private NavMeshAgent agent;
     private Transform npcTransform;
+    public NpcData.NPC_Type npc_Type { get { return npcData.Npc_Type; } }
     private NPC_State currentState = NPC_State.Idle;
     public enum NPC_State
     {
@@ -38,7 +41,11 @@ public class NpcController : MonoBehaviour, IDamagable
         {
             Debug.LogWarning($"Npc: {name}, npc data not attached");
         }
-        else agent.speed = npcData.runningSpeed;
+        else
+        {
+            agent.speed = npcData.runningSpeed;
+            npcData.InitializeNpc(gameObject);
+        }
     }
     private IEnumerator Roam()
     {
@@ -48,7 +55,7 @@ public class NpcController : MonoBehaviour, IDamagable
             //get valid destination
             //Debug.Log("Searching for valid destination...");
             Vector3 nextDestination = GetRandomPosition();
-            while (!CanReachPositionWithCalculatePath(nextDestination))
+            while (!CanReachPositionWithRaycast(nextDestination))
             {
                 yield return new WaitForSeconds(NpcData.CAN_REACH_POSITION_CD);
                 nextDestination = GetRandomPosition();
@@ -65,21 +72,48 @@ public class NpcController : MonoBehaviour, IDamagable
             }
 
             //wait for some time before going to new path
-            yield return new WaitForSeconds(npcData.newPathCd);
+            yield return new WaitForSeconds(NpcData.NEW_PATH_CD);
             //Debug.Log($"{timeBetweenNewPath} seconds passed, returning to main loop");
         }
+    }
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
     #endregion
 
     #region Methods
+    private int timesRun = 0;
+    private float previousDistance = 0;
     private bool AgentReachedDestination(Vector3 destination)
     {
         //disable y (height) calculations
-        //Debug.Log("AgentReachedDestination called");
         Vector2 agentPosition = new Vector2(npcTransform.position.x, npcTransform.position.z);
         Vector2 dest = new Vector2(destination.x, destination.z);
-        //Debug.Log($"Vector2.Distance(agentPosition, dest) = {Vector2.Distance(agentPosition, dest)}");
-        return Vector2.Distance(agentPosition, dest) < agent.stoppingDistance;
+
+
+        float newDistance = Vector2.Distance(agentPosition, dest);
+
+        //UGLYYY but prevents from getting stuck - can reach position not always passes right value
+        if (timesRun == 0)
+        {
+            previousDistance = newDistance;
+            timesRun++;
+        }
+        else
+        {
+            if (newDistance == previousDistance)
+            {
+                timesRun += 1;
+                if (timesRun > 4) return true;
+            }
+            else
+            {
+                timesRun = 0;
+            }
+        }
+
+        return previousDistance < agent.stoppingDistance;
     }
     private Vector3 GetRandomPosition()
     {
@@ -111,7 +145,8 @@ public class NpcController : MonoBehaviour, IDamagable
 
     public void TakeDamage(float damage)
     {
-        Debug.Log($"{name}, just took {damage} damage");
+        OnNpcDeath?.Invoke(npc_Type);
+        Destroy(gameObject);
     }
     #endregion
 }

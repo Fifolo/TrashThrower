@@ -53,10 +53,9 @@ public class TrashPicker : MonoBehaviour
         else if (other.transform.TryGetComponent<TrashCan>(out TrashCan thrashCan))
         {
             //do you have any thrash of that type?
-            Trash.TrashType thrashCanType = thrashCan.TrashCanType;
-            if (HasAnyThrashOfType(thrashCanType)) PlaceAllThrashInCan(thrashCanType, thrashCan.transform);
-
-            //else Debug.Log($"You dont have thrash of type {thrashCanType}");
+            Trash.TrashType trashCanType = thrashCan.TrashCanType;
+            if (HasAnyThrashOfType(trashCanType)) PlaceAllThrashInCan(trashCanType, thrashCan.transform);
+            else Debug.Log($"you dont have trash of type{trashCanType}");
         }
     }
     #endregion

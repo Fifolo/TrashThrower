@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "571df673",
         "name": "com.DefaultCompany.ThrashThrower",
-        "processId": 32255,
+        "processId": 21283,
         "exited": false
     },
     "m_SelectedPriority": 5,
@@ -48,6 +48,12 @@
             "deviceId": "571df673",
             "name": "com.DefaultCompany.ThrashThrower",
             "processId": 32255,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.DefaultCompany.ThrashThrower",
+            "processId": 21283,
             "exited": false
         }
     ],

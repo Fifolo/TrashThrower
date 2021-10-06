@@ -20,5 +20,6 @@ public class Trash : MonoBehaviour
         Different
     }
     private void Awake() => trashRigidbody = GetComponent<Rigidbody>();
+    private void Start() => trashRigidbody.AddTorque(new Vector3(Random.Range(0f,360f), Random.Range(0f, 360f), Random.Range(0f, 360f)), ForceMode.Impulse);
     public float GetTrashMass() => trashRigidbody.mass;
 }
