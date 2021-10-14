@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SoundManager : Singleton<SoundManager>
 {
+    /*
+     * MUSIC 
+     */
+
     private AudioSource musicSource;
     private AudioSource soundSource;
 
@@ -38,7 +42,6 @@ public class SoundManager : Singleton<SoundManager>
     {
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
-
         soundSource = gameObject.AddComponent<AudioSource>();
     }
 

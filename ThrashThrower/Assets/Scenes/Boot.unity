@@ -138,7 +138,17 @@ PrefabInstance:
     - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
         type: 3}
       propertyPath: gameDifficulty
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
+        type: 3}
+      propertyPath: managerPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
+        type: 3}
+      propertyPath: managerPrefabs.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4626805224794185743, guid: 32ece377cacd8e64b9ce62bea05e9894,
         type: 3}

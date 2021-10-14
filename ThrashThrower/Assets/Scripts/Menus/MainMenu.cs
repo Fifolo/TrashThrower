@@ -18,6 +18,7 @@ public class MainMenu : Singleton<MainMenu>
     private void AddButtonActions()
     {
         playButton.onClick.AddListener(GameManager.Instance.StartGame);
+        optionsButton.onClick.AddListener(UIManager.Instance.LoadOptions);
         exitButton.onClick.AddListener(GameManager.Instance.ExitGame);
     }
 }

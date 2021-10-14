@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   managerPrefabs:
   - {fileID: 6869194779198110672, guid: 48e865583c6c7ed40bdcd8e1ae321f9d, type: 3}
-  - {fileID: 1742529283600676270, guid: 9e6e42357be6ef941ab2ea9320964708, type: 3}
+  gameDifficulty: 0
 --- !u!1001 &6317042790928206292
 PrefabInstance:
   m_ObjectHideFlags: 0

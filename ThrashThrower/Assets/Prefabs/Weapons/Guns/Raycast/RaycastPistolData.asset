@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d000932f2004f5942a4d761f1defb9b3, type: 3}
+  m_Name: RaycastPistolData
+  m_EditorClassIdentifier: 
+  maxAmmo: 10
+  shootingRate: 0.5
+  damage: 30
+  reloadTime: 1
+  fireClip: {fileID: 8300000, guid: 718740d3edc3925409cb9b987a372c32, type: 3}
+  reloadingClip: {fileID: 8300000, guid: c35c68546816ff9428f63b8dfd02d740, type: 3}
+  muzzleFlash: {fileID: 264589168118401068, guid: 06d9a056e89b25b4db61a95c53aeacad,
+    type: 3}
+  steam: {fileID: 264589168118401068, guid: b19802d3c6f2d1f47b421f63d00fa115, type: 3}
+  raycastRange: 100

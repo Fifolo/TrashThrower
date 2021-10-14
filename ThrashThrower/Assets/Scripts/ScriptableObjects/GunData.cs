@@ -6,4 +6,8 @@ public abstract class GunData : ScriptableObject
     public float shootingRate = 0.5f;
     public float damage = 10f;
     public float reloadTime = 1f;
+    public AudioClip fireClip;
+    public AudioClip reloadingClip;
+    public GameObject muzzleFlash;
+    public GameObject steam;
 }

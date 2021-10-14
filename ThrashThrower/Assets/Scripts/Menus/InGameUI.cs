@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 public class InGameUI : Singleton<InGameUI>
 {
     #region Editor Exposed Fields
@@ -10,182 +11,162 @@ public class InGameUI : Singleton<InGameUI>
     [SerializeField] private TextMeshProUGUI glassText;
     [SerializeField] private TextMeshProUGUI differentText;
     [SerializeField] private TextMeshProUGUI totalBagWeightText;
-    [SerializeField] private TextMeshProUGUI totalTrashAmountText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI currentAmmoText;
+    [SerializeField] private TextMeshProUGUI maxAmmoText;
+    [SerializeField] private Slider contaminationSlider;
+    [SerializeField] private TextMeshProUGUI contaminationNumber;
     #endregion
 
     #region Instance Variables
-    public List<TrashCan> trashCans;
-    private TrashPicker trashPicker;
-    public int TotalTrashAmount { get; private set; }
-    public float TotalBagWeight { get; private set; }
-    public int Score { get; private set; } 
+    private TrashPicker currentTrashPicker;
+    public int Score { get; private set; }
     #endregion
 
     #region Mono Behaviour
     protected override void Awake()
     {
         base.Awake();
-        trashCans = new List<TrashCan>();
-        TotalTrashAmount = 0;
-        TotalBagWeight = 0;
         Score = 0;
     }
-    private void Start()
+    private void OnEnable()
     {
-        SubscribeToEvents();
-        InitializeCans();
-        InitializeTrashPicker(GameObject.Find("Player").GetComponentInChildren<TrashPicker>());
-    }
-
-    private void SubscribeToEvents()
-    {
-        NpcController.OnNpcDeath += NpcController_OnNpcDeath;
-    }
-
-    private void NpcController_OnNpcDeath(NpcData.NPC_Type npc_Type)
-    {
-        switch (npc_Type)
+        if (GameManager.Instance.currentState == GameManager.GameState.Playing)
         {
-            case NpcData.NPC_Type.Bad:
-                Score += 1;
-                break;
-            case NpcData.NPC_Type.Good:
-                Score -= 1;
-                break;
+            InitializeUI();
+            SubscribeToEventsOnPlay();
+            InitializeUI();
         }
-        scoreText.text = Score.ToString();
+    }
+    private void OnDisable()
+    {
+        UnsubscribeToEventsOnPlay();
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        UnsubsrcribeToEvents();
+        UnsubscribeToEventsOnPlay();
     }
     #endregion
 
     #region Methods
+
+    private void InitializeUI()
+    {
+        Gun currentPlayerGun = FindObjectOfType<PlayerShooting>().CurrentGun;
+        //Gun currentPlayerGun = GameObject.Find("Player 1").GetComponentInChildren<PlayerShooting>().CurrentGun;
+        SetAmountText(currentAmmoText, currentPlayerGun.AmmoLeft);
+        SetAmountText(maxAmmoText, currentPlayerGun.MaxAmmo);
+    }
+    private void SubscribeToEventsOnPlay()
+    {
+        InitializeTrashPicker(GameObject.Find("Player 1").GetComponentInChildren<TrashPicker>());
+
+        Npc.OnNpcDeath += Npc_OnNpcDeath;
+        PlayerShooting.OnWeaponSwap += PlayerShooting_OnWeaponSwap;
+        PlayerShooting.OnPlayerReloadComplete += PlayerShooting_OnPlayerReloadComplete;
+        PlayerShooting.OnPlayerShot += PlayerShooting_OnGunFire;
+        Trash.OnCurrentContaminationChange += Trash_OnCurrentContaminationChange;
+    }
     private void InitializeTrashPicker(TrashPicker newTrashPicker)
     {
-        trashPicker = newTrashPicker;
-        trashPicker.OnThrashPickUp += TrashPicker_OnThrashAction;
-        trashPicker.OnThrashRemove += TrashPicker_OnThrashAction;
-        SetBagWeight(trashPicker.CurrentBagWeight);
-        ResetTrashAmountInBag();
+        UnsubscribeToCurrentTrashPicker();
+
+        currentTrashPicker = newTrashPicker;
+        currentTrashPicker.OnThrashPickUp += TrashPicker_OnThrashPickupAndRemove;
+        currentTrashPicker.OnThrashRemove += TrashPicker_OnThrashPickupAndRemove;
+        SetBagWeight(currentTrashPicker.CurrentBagWeight);
+        SetTrashTypesAmountInBag();
     }
-    private void ResetTrashAmountInBag()
+    private void UnsubscribeToEventsOnPlay()
     {
-        differentText.text = trashPicker.GetAmountFromBag(Trash.TrashType.Different).ToString();
-        plasticText.text = trashPicker.GetAmountFromBag(Trash.TrashType.Plastic).ToString();
-        paperText.text = trashPicker.GetAmountFromBag(Trash.TrashType.Paper).ToString();
-        metalText.text = trashPicker.GetAmountFromBag(Trash.TrashType.Metal).ToString();
-        glassText.text = trashPicker.GetAmountFromBag(Trash.TrashType.Glass).ToString();
+        UnsubscribeToCurrentTrashPicker();
+
+        Npc.OnNpcDeath -= Npc_OnNpcDeath;
+        PlayerShooting.OnWeaponSwap -= PlayerShooting_OnWeaponSwap;
+        PlayerShooting.OnPlayerReloadComplete -= PlayerShooting_OnPlayerReloadComplete;
+        PlayerShooting.OnPlayerShot -= PlayerShooting_OnGunFire;
+        Trash.OnCurrentContaminationChange -= Trash_OnCurrentContaminationChange;
     }
+
+    private void UnsubscribeToCurrentTrashPicker()
+    {
+        if (currentTrashPicker != null)
+        {
+            currentTrashPicker.OnThrashPickUp -= TrashPicker_OnThrashPickupAndRemove;
+            currentTrashPicker.OnThrashRemove -= TrashPicker_OnThrashPickupAndRemove;
+        }
+    }
+    private void Trash_OnCurrentContaminationChange(float contamination)
+    {
+        if (contamination > 0)
+        {
+            float contaminationPercent = (contamination / Trash.MaxContamination) * 100;
+            contaminationSlider.value = contaminationPercent;
+            contaminationNumber.text = $"{(int)contaminationPercent}%";
+        }
+    }
+
+    private void PlayerShooting_OnPlayerReloadComplete(Gun gun) => SetAmountText(currentAmmoText, gun.AmmoLeft);
+    private void PlayerShooting_OnGunFire(Gun gun) => SetAmountText(currentAmmoText, gun.AmmoLeft);
+    private void PlayerShooting_OnWeaponSwap(Gun gun)
+    {
+        SetAmountText(currentAmmoText, gun.AmmoLeft);
+        SetAmountText(maxAmmoText, gun.MaxAmmo);
+    }
+    private void Npc_OnNpcDeath(int pointsOnDeath)
+    {
+        Score += pointsOnDeath;
+        SetAmountText(scoreText, Score);
+    }
+
+    private void SetTrashTypesAmountInBag()
+    {
+        SetAmountText(differentText, currentTrashPicker.GetAmountFromBag(Trash.TrashType.Different));
+        SetAmountText(plasticText, currentTrashPicker.GetAmountFromBag(Trash.TrashType.Plastic));
+        SetAmountText(paperText, currentTrashPicker.GetAmountFromBag(Trash.TrashType.Paper));
+        SetAmountText(metalText, currentTrashPicker.GetAmountFromBag(Trash.TrashType.Metal));
+        SetAmountText(glassText, currentTrashPicker.GetAmountFromBag(Trash.TrashType.Glass));
+    }
+
+    private void SetAmountText(TextMeshProUGUI textField, int amount) => textField.text = amount.ToString();
+
+    private void TrashPicker_OnThrashPickupAndRemove(Trash.TrashType trashType)
+    {
+        switch (trashType)
+        {
+            case Trash.TrashType.Different:
+                SetAmountText(differentText, currentTrashPicker.GetAmountFromBag(trashType));
+                break;
+            case Trash.TrashType.Plastic:
+                SetAmountText(plasticText, currentTrashPicker.GetAmountFromBag(trashType));
+                break;
+            case Trash.TrashType.Paper:
+                SetAmountText(paperText, currentTrashPicker.GetAmountFromBag(trashType));
+                break;
+            case Trash.TrashType.Metal:
+                SetAmountText(metalText, currentTrashPicker.GetAmountFromBag(trashType));
+                break;
+            case Trash.TrashType.Glass:
+                SetAmountText(glassText, currentTrashPicker.GetAmountFromBag(trashType));
+                break;
+        }
+        SetBagWeight(currentTrashPicker.CurrentBagWeight);
+    }
+    private void SetBagWeight(float amount) => totalBagWeightText.text = amount.ToString();
+
+    /* not used for now
     //in case new "changing trash picker mechanic" is added
     public void ChangeTrashPicker(TrashPicker newTrashPicker)
     {
-        if (newTrashPicker != trashPicker)
+        if (newTrashPicker != currentTrashPicker)
         {
-            trashPicker.OnThrashPickUp -= TrashPicker_OnThrashAction;
-            trashPicker.OnThrashRemove -= TrashPicker_OnThrashAction;
+            currentTrashPicker.OnThrashPickUp -= TrashPicker_OnThrashAction;
+            currentTrashPicker.OnThrashRemove -= TrashPicker_OnThrashAction;
             InitializeTrashPicker(newTrashPicker);
         }
     }
-    private void TrashPicker_OnThrashAction(Trash.TrashType trashType)
-    {
-        //not optimized??
-        switch (trashType)
-        {
-            case Trash.TrashType.Different:
-                differentText.text = trashPicker.GetAmountFromBag(trashType).ToString();
-                break;
-            case Trash.TrashType.Plastic:
-                plasticText.text = trashPicker.GetAmountFromBag(trashType).ToString();
-                break;
-            case Trash.TrashType.Paper:
-                paperText.text = trashPicker.GetAmountFromBag(trashType).ToString();
-                break;
-            case Trash.TrashType.Metal:
-                metalText.text = trashPicker.GetAmountFromBag(trashType).ToString();
-                break;
-            case Trash.TrashType.Glass:
-                glassText.text = trashPicker.GetAmountFromBag(trashType).ToString();
-                break;
-        }
-
-        SetBagWeight(trashPicker.CurrentBagWeight);
-    }
-
-
-    private void InitializeCans()
-    {
-        TrashCan[] foundCans = FindObjectsOfType<TrashCan>(true);
-        foreach (TrashCan trashCan in foundCans)
-        {
-            AddNewCanToList(trashCan);
-        }
-    }
-    public void AddNewCanToList(TrashCan newCan)
-    {
-        //check if not already in the list
-        if (!trashCans.Contains(newCan))
-        {
-            trashCans.Add(newCan);
-            newCan.OnTrashPutInCan += OnTrashPutInCan;
-
-            // if there is any trash, update UI
-            if (newCan.TrashInCanAmount != 0)
-            {
-                TotalTrashAmount += newCan.TrashInCanAmount;
-                SetTotalTrashAmount(TotalTrashAmount);
-            }
-        }
-    }
-
-    private void OnTrashPutInCan()
-    {
-        TotalTrashAmount += 1;
-        SetTotalTrashAmount(TotalTrashAmount);
-
-    }
-    private void UnsubsrcribeToEvents()
-    {
-        foreach (TrashCan can in trashCans)
-        {
-            can.OnTrashPutInCan -= OnTrashPutInCan;
-        }
-
-        NpcController.OnNpcDeath -= NpcController_OnNpcDeath;
-
-        if (trashPicker != null)
-        {
-            trashPicker.OnThrashPickUp -= TrashPicker_OnThrashAction;
-            trashPicker.OnThrashRemove -= TrashPicker_OnThrashAction;
-        }
-    }
-
-    private void SetBagWeight(float amount) => totalBagWeightText.text = amount.ToString();
-    private void SetTotalTrashAmount(int amount) => totalTrashAmountText.text = amount.ToString();
-    private void SetTrashTypeAmount(Trash.TrashType trashType, int amount)
-    {
-        switch (trashType)
-        {
-            case Trash.TrashType.Different:
-                differentText.text = amount.ToString();
-                break;
-            case Trash.TrashType.Glass:
-                glassText.text = amount.ToString();
-                break;
-            case Trash.TrashType.Plastic:
-                plasticText.text = amount.ToString();
-                break;
-            case Trash.TrashType.Paper:
-                paperText.text = amount.ToString();
-                break;
-            case Trash.TrashType.Metal:
-                metalText.text = amount.ToString();
-                break;
-        }
-    }
+    */
     #endregion
 }

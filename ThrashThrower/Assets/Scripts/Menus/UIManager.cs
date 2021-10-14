@@ -38,14 +38,14 @@ public class UIManager : Singleton<UIManager>
             pauseMenu.SetActive(false);
         }
         else Debug.LogWarning("Pause menu prefab not set!");
-        /*
+        
         if (optionsMenu != null)
         {
             optionsMenu = Instantiate(optionsMenu, UImanagerTransform);
             optionsMenu.SetActive(false);
         }
         else Debug.LogWarning("Options menu prefab not set!");
-        */
+        
         if (inGameUI != null)
         {
             inGameUI = Instantiate(inGameUI, UImanagerTransform);
@@ -53,7 +53,16 @@ public class UIManager : Singleton<UIManager>
         }
         else Debug.LogWarning("Options menu prefab not set!");
     }
-
+    public void LoadOptions()
+    {
+        mainMenu.SetActive(false);
+        optionsMenu.SetActive(true);
+    }
+    public void BackFromOptions()
+    {
+        mainMenu.SetActive(true);
+        optionsMenu.SetActive(false);
+    }
     private void Instance_OnGameStateChange(GameManager.GameState from, GameManager.GameState to)
     {
         //going from boot

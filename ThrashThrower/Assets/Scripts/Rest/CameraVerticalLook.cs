@@ -6,9 +6,6 @@ using UnityEngine;
 public class CameraVerticalLook : MonoBehaviour
 {
     [SerializeField] private float maxCameraUpAngle = 40f;
-
-    //[SerializeField] private float minAngle = -10f;
-    //[SerializeField] private float maxAngle =  20f;
     [SerializeField] private Transform weaponHolder;
     private Transform cameraTransform;
     private float xRotation = 0f;

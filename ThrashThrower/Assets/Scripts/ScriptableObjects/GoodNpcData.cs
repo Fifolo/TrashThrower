@@ -5,6 +5,6 @@ public class GoodNpcData : NpcData
 {
     public override void InitializeNpc(GameObject npc)
     {
-        npc_Type = NPC_Type.Good;
+        npcType = NpcType.Good;
     }
 }

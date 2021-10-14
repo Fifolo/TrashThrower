@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
+[RequireComponent(typeof(PlayerMovement))]
 public class PlayerInputController : MonoBehaviour
 {
     [SerializeField] private CameraVerticalLook playerCamera;
@@ -67,11 +68,11 @@ public class PlayerInputController : MonoBehaviour
 
     private void Reload_performed(InputAction.CallbackContext obj) => playerShooting.ReloadGun();
 
-    private void Fire_performed(InputAction.CallbackContext obj) => playerShooting.StartFiring();
+    private void Fire_performed(InputAction.CallbackContext obj) => playerShooting.StartShooting();
 
-    private void Fire_canceled(InputAction.CallbackContext obj) => playerShooting.StopFiring();
+    private void Fire_canceled(InputAction.CallbackContext obj) => playerShooting.StopShooting();
 
-    private void Fire_started(InputAction.CallbackContext obj) => playerShooting.FireOneTime();
+    private void Fire_started(InputAction.CallbackContext obj) => playerShooting.ShootOneTime();
 
     private void Pause_performed(InputAction.CallbackContext obj) => GameManager.Instance.PauseGame();
 

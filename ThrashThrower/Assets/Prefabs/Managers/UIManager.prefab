@@ -47,5 +47,6 @@ MonoBehaviour:
     type: 3}
   pauseMenu: {fileID: 5290059431726764647, guid: 674c51bee77b4b04598524c51dd14df5,
     type: 3}
-  optionsMenu: {fileID: 0}
+  optionsMenu: {fileID: 1036326647036632566, guid: 0aac5c7715e44164fb6d881f78883439,
+    type: 3}
   inGameUI: {fileID: 651482599492804552, guid: 77db6048b013f9d4da1fbfbcb3ba4d8d, type: 3}
