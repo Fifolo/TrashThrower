@@ -6,12 +6,20 @@ public abstract class NpcData : ScriptableObject
     public float roamingRange = 10f;
     public float runningSpeed = 8f;
     public int pointsOnDeath = 0;
+
     //Amount of time that npc waits after reaching destination, before setting new path
+    [HideInInspector]
     public float NEW_PATH_CD = 1f;
+
     //Amount of time that npc controller waits, before trying to look for new valid path
+    [HideInInspector]
     public float CAN_REACH_POSITION_CD = 0.2f;
+
     //check if npc reached position cd
+    [HideInInspector]
     public float DISTANCE_CHECK_CD = 0.4f;
+
+    [HideInInspector]
     //how often should npc look for new path to target
     public float FOLLOW_CD = 1F;
 

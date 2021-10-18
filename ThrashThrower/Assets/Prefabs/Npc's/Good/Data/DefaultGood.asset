@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608cbf9f1abc0f1478e7779d973f488b, type: 3}
   m_Name: DefaultGood
   m_EditorClassIdentifier: 
-  health: 50
+  health: 100
   roamingRange: 20
   runningSpeed: 4
   pointsOnDeath: -5

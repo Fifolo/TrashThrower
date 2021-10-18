@@ -2,8 +2,8 @@
     "m_SelectedDeviceId": "571df673",
     "m_SelectedPackage": {
         "deviceId": "571df673",
-        "name": "com.DefaultCompany.ThrashThrower",
-        "processId": 23951,
+        "name": "com.FifiProductions.TrashThrower",
+        "processId": 20092,
         "exited": false
     },
     "m_SelectedPriority": 4,
@@ -96,6 +96,12 @@
             "deviceId": "571df673",
             "name": "com.DefaultCompany.ThrashThrower",
             "processId": 23951,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.FifiProductions.TrashThrower",
+            "processId": 20092,
             "exited": false
         }
     ],

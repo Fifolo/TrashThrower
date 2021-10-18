@@ -68,7 +68,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         float forwardInput = inputVector.y;
         Vector3 movementVector = transform.right * sideInput + transform.forward * forwardInput;
 
-        if (isGrounded) characterController.Move(movementVector * playerData.movementSpeed * Time.deltaTime);
+        if (isGrounded) characterController.Move(movementVector * currentMoveSpeed * Time.deltaTime);
         else characterController.Move(movementVector * playerData.jumpSpeedControl * Time.deltaTime);
     }
     public void RotateCharacter(float xInput) => characterTransform.Rotate(Vector3.up * xInput * playerData.rotationSpeed * Time.deltaTime);
