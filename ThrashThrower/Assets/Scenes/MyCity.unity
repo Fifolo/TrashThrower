@@ -3555,31 +3555,31 @@ MonoBehaviour:
   prefabPools:
   - prefab: {fileID: 5210574927717572494, guid: dac38bf87f4b12a44b64dd651f4d4f88,
       type: 3}
-    amount: 5
+    amount: 10
   - prefab: {fileID: 5210574927717572494, guid: 6b321af17fe7b484a93061804e944922,
       type: 3}
-    amount: 5
+    amount: 10
   - prefab: {fileID: 5210574927717572494, guid: 5291dceb4b1e6c949be805ce90879c39,
       type: 3}
     amount: 5
   - prefab: {fileID: 5210574927717572494, guid: 6901906f46d6dab4c97f999198c7f93e,
       type: 3}
-    amount: 3
+    amount: 4
   - prefab: {fileID: 5210574927717572494, guid: b979674ffb8f2f144a05944d96d493ba,
       type: 3}
-    amount: 2
+    amount: 4
   - prefab: {fileID: 5210574927717572494, guid: 453adcf9a1a4af4418ae6ba1b46069e2,
       type: 3}
-    amount: 4
+    amount: 5
   - prefab: {fileID: 5210574927717572494, guid: 41b2cae5021427445866ad37ff1fd0b0,
       type: 3}
-    amount: 5
+    amount: 10
   - prefab: {fileID: 5210574927717572494, guid: 43d11a261b2304e4a9ce4b31e1584d01,
       type: 3}
-    amount: 3
+    amount: 4
   - prefab: {fileID: 5210574927717572494, guid: 339ec38bd64d3f1428138ce8314934ba,
       type: 3}
-    amount: 3
+    amount: 5
   sameAmountPrefabs: []
   amount: 0
 --- !u!1 &171555518

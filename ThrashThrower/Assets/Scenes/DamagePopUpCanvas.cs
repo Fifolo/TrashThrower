@@ -11,8 +11,8 @@ public class DamagePopUpCanvas : Singleton<DamagePopUpCanvas>
 
     //based on distance from player
     [SerializeField] private AnimationCurve fontSizeCurve;
-    private float minFontSize = 5f;
-    private float maxFontSize = 7f;
+    private float minFontSize = 3f;
+    private float maxFontSize = 5f;
     private float maxDistance = 50f;
 
     [SerializeField] private Color normalColor;
