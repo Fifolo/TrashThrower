@@ -1,5 +1,5 @@
 # TrashThrower
-Repository for my ThrashThrower mobile game.
+Repository for my TrashThrower mobile game.
 
 Trash thrower is a 3d mobile shooter in which players job is to survive as long as possible while keeping the environment clean.
 Fight off bad guys that want to shoot you down and track down ones that litter the environment.
