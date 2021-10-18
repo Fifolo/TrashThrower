@@ -55,20 +55,31 @@ public class InGameUI : Singleton<InGameUI>
     private void InitializeUI()
     {
         Gun currentPlayerGun = FindObjectOfType<PlayerShooting>().CurrentGun;
-        //Gun currentPlayerGun = GameObject.Find("Player 1").GetComponentInChildren<PlayerShooting>().CurrentGun;
+
+        contaminationSlider.value = 0;
+        contaminationNumber.text = "0%";
+
         SetAmountText(currentAmmoText, currentPlayerGun.AmmoLeft);
         SetAmountText(maxAmmoText, currentPlayerGun.MaxAmmo);
     }
     private void SubscribeToEventsOnPlay()
     {
-        InitializeTrashPicker(GameObject.Find("Player 1").GetComponentInChildren<TrashPicker>());
+        InitializeTrashPicker(FindObjectOfType<PlayerShooting>().GetComponentInChildren<TrashPicker>());
 
         Npc.OnNpcDeath += Npc_OnNpcDeath;
         PlayerShooting.OnWeaponSwap += PlayerShooting_OnWeaponSwap;
         PlayerShooting.OnPlayerReloadComplete += PlayerShooting_OnPlayerReloadComplete;
         PlayerShooting.OnPlayerShot += PlayerShooting_OnGunFire;
         Trash.OnCurrentContaminationChange += Trash_OnCurrentContaminationChange;
+        TrashCan.OnTrashPutInCan += TrashCan_OnTrashPutInCan;
     }
+
+    private void TrashCan_OnTrashPutInCan(Trash trash)
+    {
+        Score += (int)trash.TrashContamintation;
+        SetAmountText(scoreText, Score);
+    }
+
     private void InitializeTrashPicker(TrashPicker newTrashPicker)
     {
         UnsubscribeToCurrentTrashPicker();
@@ -100,7 +111,7 @@ public class InGameUI : Singleton<InGameUI>
     }
     private void Trash_OnCurrentContaminationChange(float contamination)
     {
-        if (contamination > 0)
+        if (contamination >= 0)
         {
             float contaminationPercent = (contamination / Trash.MaxContamination) * 100;
             contaminationSlider.value = contaminationPercent;
@@ -115,9 +126,9 @@ public class InGameUI : Singleton<InGameUI>
         SetAmountText(currentAmmoText, gun.AmmoLeft);
         SetAmountText(maxAmmoText, gun.MaxAmmo);
     }
-    private void Npc_OnNpcDeath(int pointsOnDeath)
+    private void Npc_OnNpcDeath(NpcData npcData)
     {
-        Score += pointsOnDeath;
+        Score += npcData.pointsOnDeath;
         SetAmountText(scoreText, Score);
     }
 
@@ -154,7 +165,7 @@ public class InGameUI : Singleton<InGameUI>
         }
         SetBagWeight(currentTrashPicker.CurrentBagWeight);
     }
-    private void SetBagWeight(float amount) => totalBagWeightText.text = amount.ToString();
+    private void SetBagWeight(float amount) => totalBagWeightText.text = string.Format("{0:0.0#}", amount);
 
     /* not used for now
     //in case new "changing trash picker mechanic" is added

@@ -6,4 +6,5 @@ using UnityEngine;
 public class RaycastGunData : GunData
 {
     public float raycastRange = 100f;
+    public AnimationCurve damafeFalloffCurve;
 }

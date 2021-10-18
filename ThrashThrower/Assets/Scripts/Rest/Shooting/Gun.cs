@@ -6,7 +6,6 @@ using UnityEngine;
 public abstract class Gun : MonoBehaviour
 {
     [SerializeField] protected Transform firePoint;
-    [SerializeField] protected AnimatorOverrideController weaponAnimator;
 
     #region Instance Variables
     public Vector3 FirePointPosition { get { return firePoint.position; } }

@@ -49,7 +49,7 @@ public abstract class ObjectPool<T> : Singleton<ObjectPool<T>> where T : MonoBeh
             T pooledObject;
             for (int i = 0; i < amount; i++)
             {
-                pooledObject = Instantiate(sameAmountPrefabs[j], transform);
+                pooledObject = Instantiate(sameAmountPrefabs[j], poolerTransform);
                 pooledObject.gameObject.SetActive(false);
                 freeList.Add(pooledObject);
             }

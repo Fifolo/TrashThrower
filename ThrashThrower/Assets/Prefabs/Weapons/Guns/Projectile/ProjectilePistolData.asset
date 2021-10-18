@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAmmo: 5
   shootingRate: 0.4
-  damage: 50
+  damage: 60
   reloadTime: 1
+  critChance: 0.345
+  critMultiplier: 2.12
   fireClip: {fileID: 8300000, guid: 718740d3edc3925409cb9b987a372c32, type: 3}
   reloadingClip: {fileID: 8300000, guid: f3f8f2fcb0227b84dbf6bed7b0498a6d, type: 3}
   muzzleFlash: {fileID: 0}
   steam: {fileID: 0}
-  projectileSpeed: 5
+  projectileSpeed: 13.2

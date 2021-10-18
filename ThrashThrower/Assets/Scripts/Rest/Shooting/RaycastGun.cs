@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RaycastGun : Gun
 {
+    /*
+     * FOR NOW ITS ONLY USABLE BY PLAYER
+     */
     [SerializeField] private RaycastGunData raycastGunData;
     protected Animator gunAnimator;
     private Transform originTransform;
@@ -46,9 +49,27 @@ public class RaycastGun : Gun
         {
             if (Physics.Raycast(originTransform.position, originTransform.forward, out RaycastHit hit, raycastGunData.raycastRange, excludeLayers))
             {
-                if (hit.transform.TryGetComponent(out IDamagable damagable)) damagable.TakeDamage(raycastGunData.damage);
+                if (hit.transform.TryGetComponent(out IDamagable damagable))
+                {
+                    float damage = raycastGunData.damage;
+                    //decrease damage over distance
+                    float damagePercent = raycastGunData.damafeFalloffCurve.Evaluate(hit.distance / raycastGunData.raycastRange);
+                    damage *= damagePercent;
+                    bool wasCrit = false;
+                    //apply crit damage if happened
+                    if (Random.Range(0f, 1f) < raycastGunData.critChance)
+                    {
+                        damage *= raycastGunData.critMultiplier;
+                        wasCrit = true;
+                    }
+                    damagable.TakeDamage(damage);
+                    //spawn text object
+                    DamagePopUpCanvas.Instance.SpawnText(damage, wasCrit, hit.distance, hit.point);
+                }
             }
+            //do some pooling!!!
             Instantiate(raycastGunData.steam, firePoint.position, firePoint.rotation);
+            Instantiate(raycastGunData.muzzleFlash, firePoint.position, firePoint.rotation);
             currentAmmo--;
             audioSource.PlayOneShot(raycastGunData.fireClip);
             gunAnimator.SetTrigger("Fire");

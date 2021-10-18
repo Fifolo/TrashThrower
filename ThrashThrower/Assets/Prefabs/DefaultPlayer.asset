@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42dc543e24869354ca0bcf45292ca9a6, type: 3}
   m_Name: DefaultPlayer
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  jumpSpeedControl: 3
-  jumpHeight: 1.542
-  rotationSpeed: 117.1
-  gravityForce: 19.62
-  reloadTimeMultiplier: 1
+  baseHealth: 1000
+  baseHealthRegenPerSecond: 54.2
+  autoRegenWaitTime: 4.48
+  movementSpeed: 7
+  jumpSpeedControl: 2
+  jumpHeight: 1.5
+  rotationSpeed: 136.9
+  gravityForce: 21.2
+  reloadTimeMultiplier: 0.848
   guns:
   - {fileID: -4373589119409275509, guid: b444c88f3b07fa14b85bd62124f74386, type: 3}
   - {fileID: 8544926263659583780, guid: 0a690b153dcf0d745a524cd2d58b9f3a, type: 3}

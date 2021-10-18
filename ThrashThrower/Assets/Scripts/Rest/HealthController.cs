@@ -8,8 +8,16 @@ public class HealthController : MonoBehaviour, IDamagable
     [SerializeField] private Volume healthVolume;
     [Range(0f, 1f)]
     [SerializeField] private float maxVignetteIntensity = 0.6f;
+    [Range(0f, 0.5f)]
+    [SerializeField] private float minVignetteIntensity = 0.147f;
     [Range(2f, 0.1f)]
     [SerializeField] private float PULSE_SPEED = 0.7f;
+    [Range(0f,0.5f)]
+    [SerializeField] private float hearthPulseTreshold = 0.3f;
+
+    public delegate void PlayerHealthEvent(float damage);
+    public static event PlayerHealthEvent OnPlayerDeath;
+    public static event PlayerHealthEvent OnPlayerDamageTaken;
 
     private static float ONE_SECOND = 1f;
 
@@ -45,7 +53,7 @@ public class HealthController : MonoBehaviour, IDamagable
             if (healthVolume.profile.TryGet(out vignette))
             {
                 vignette.smoothness.value = vignette.smoothness.max;
-                vignette.intensity.value = vignette.intensity.min;
+                vignette.intensity.value = minVignetteIntensity;
             }
             if (healthVolume.profile.TryGet(out chromaticAberration))
             {
@@ -93,6 +101,7 @@ public class HealthController : MonoBehaviour, IDamagable
 
     public void TakeDamage(float damageAmount)
     {
+
         if (vignetteCoroutine != null) StopCoroutine(vignetteCoroutine);
         if (autoRegenCoroutine != null) StopCoroutine(autoRegenCoroutine);
 
@@ -106,7 +115,12 @@ public class HealthController : MonoBehaviour, IDamagable
         StartCoroutine(autoRegenCoroutine);
 
         currentHealth -= damageAmount;
-        if (currentHealth <= 400f) StartCoroutine(HeartPulse());
+
+        OnPlayerDamageTaken(damageAmount);
+
+        if(currentHealth <= 0) OnPlayerDeath?.Invoke(0);
+
+        if (currentHealth/maxHealth <= hearthPulseTreshold && !heartPulseActive) StartCoroutine(HeartPulse());
     }
     public void Heal(float healAmount)
     {
@@ -131,6 +145,7 @@ public class HealthController : MonoBehaviour, IDamagable
     private IEnumerator VignetteIntensityCoroutine(float endValue, float duration)
     {
         if (endValue >= maxVignetteIntensity) endValue = maxVignetteIntensity;
+        else if (endValue < minVignetteIntensity) endValue = minVignetteIntensity;
 
         float startValue = vignette.intensity.value;
 
@@ -143,12 +158,14 @@ public class HealthController : MonoBehaviour, IDamagable
         }
         vignette.intensity.value = endValue;
     }
+    private bool heartPulseActive = false;
     private IEnumerator HeartPulse()
     {
+        heartPulseActive = true;
         float time = 0;
 
         //hearth pulse
-        while (currentHealth < 300f)
+        while (currentHealth/maxHealth <= hearthPulseTreshold)
         {
             time = 0;
             while (time < (PULSE_SPEED / 2))
@@ -175,5 +192,7 @@ public class HealthController : MonoBehaviour, IDamagable
             time += Time.deltaTime;
             yield return null;
         }
+        chromaticAberration.intensity.value = chromaticAberration.intensity.min;
+        heartPulseActive = false;
     }
 }

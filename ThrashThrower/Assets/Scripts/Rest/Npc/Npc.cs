@@ -5,7 +5,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class Npc : MonoBehaviour, IDamagable
 {
-    public delegate void NpcAction(int pointsOnDeath);
+    public delegate void NpcAction(NpcData npcData);
     public static event NpcAction OnNpcDeath;
 
     #region Timers
@@ -28,7 +28,7 @@ public abstract class Npc : MonoBehaviour, IDamagable
         {
             currentHealth = value;
 
-            if (currentHealth <= 0) OnNpcDeath?.Invoke(npcData.pointsOnDeath);
+            if (currentHealth <= 0) OnNpcDeath?.Invoke(npcData);
         }
     }
 

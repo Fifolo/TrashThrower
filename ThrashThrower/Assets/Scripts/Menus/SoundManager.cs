@@ -2,50 +2,87 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class SoundManager : Singleton<SoundManager>
 {
-    /*
-     * MUSIC 
-     */
+    [SerializeField] private List<MusicClip> musicClips;
+    [SerializeField] private AudioSource musicSource;
 
-    private AudioSource musicSource;
-    private AudioSource soundSource;
+    [SerializeField] private AudioSource soundSource;
+    [SerializeField] private List<AudioClip> onButtonPressClips;
 
-    private Transform playerTransform;
-    private Transform soundManagerTransform;
+    private List<AudioClip> mainMenuMusic;
+    private List<AudioClip> playModeMusic;
+
+    [System.Serializable]
+    private class MusicClip
+    {
+        public AudioClip clip;
+        public MusicType musicType;
+        public enum MusicType
+        {
+            MainMenu,
+            PlayMode
+        }
+    }
     protected override void Awake()
     {
         base.Awake();
-        soundManagerTransform = transform;
-        InstantiateAudioSources();
-        GameManager.Instance.OnGameStateChange += GameManager_OnGameStateChange;
+        mainMenuMusic = new List<AudioClip>();
+        playModeMusic = new List<AudioClip>();
+        ManageAudioSource();
+        GameManager.Instance.OnGameStateChange += Instance_OnGameStateChange;
     }
 
-    protected override void OnDestroy()
+    private void ManageAudioSource()
     {
-        if(GameManager.Instance != null) GameManager.Instance.OnGameStateChange -= GameManager_OnGameStateChange;
-        base.OnDestroy();
-    }
-
-    private void GameManager_OnGameStateChange(GameManager.GameState from, GameManager.GameState to)
-    {
-        if (to == GameManager.GameState.Playing)
+        musicSource.loop = false;
+        foreach (MusicClip musicClip in musicClips)
         {
-            if (playerTransform == null) playerTransform = GameObject.Find("Player").transform;
-
-            soundManagerTransform.SetParent(playerTransform);
+            if (musicClip.musicType == MusicClip.MusicType.PlayMode) playModeMusic.Add(musicClip.clip);
+            else mainMenuMusic.Add(musicClip.clip);
         }
-        else if (to == GameManager.GameState.MainMenu) soundManagerTransform.SetParent(GameManager.Instance.transform);
     }
 
-    private void InstantiateAudioSources()
+    private void Instance_OnGameStateChange(GameManager.GameState from, GameManager.GameState to)
     {
-        musicSource = gameObject.AddComponent<AudioSource>();
-        musicSource.loop = true;
-        soundSource = gameObject.AddComponent<AudioSource>();
+
+        if (to == GameManager.GameState.MainMenu)
+        {
+            if (musicSource.isPlaying)
+            {
+                musicSource.Stop();
+            }
+        }
+        else if (to == GameManager.GameState.Pause)
+        {
+            musicSource.Pause();
+        }
+        else if (to == GameManager.GameState.Playing)
+        {
+            if (from == GameManager.GameState.Pause) musicSource.UnPause();
+            else if (playModeMusic.Count > 0)
+            {
+                int randomTrackIndex = Random.Range(0, playModeMusic.Count);
+                PlayMusic(playModeMusic[randomTrackIndex], true);
+            }
+        }
     }
 
+    public void ButtonPressed()
+    {
+        if (onButtonPressClips.Count > 0)
+        {
+            int randomIndex = Random.Range(0, onButtonPressClips.Count);
+            soundSource.PlayOneShot(onButtonPressClips[randomIndex]);
+        }
+    }
 
-    public void PlaySoundOneShot(AudioClip audioClip) => soundSource.PlayOneShot(audioClip);
-    public void PlayMusicOnLoop(AudioClip audioClip) => musicSource.PlayOneShot(audioClip);
+    public void PlayMusic(AudioClip clip, bool loop)
+    {
+        musicSource.Stop();
+        musicSource.loop = loop;
+        musicSource.clip = clip;
+        musicSource.Play();
+    }
 }

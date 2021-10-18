@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &1419397464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4626805225802445060, guid: 32ece377cacd8e64b9ce62bea05e9894,
+    type: 3}
+  m_PrefabInstance: {fileID: 4626805225511744253}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4626805225511744253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -142,14 +148,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
         type: 3}
+      propertyPath: menuEventSystem
+      value: 
+      objectReference: {fileID: 1419397464}
+    - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
+        type: 3}
       propertyPath: managerPrefabs.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4626805224794185742, guid: 32ece377cacd8e64b9ce62bea05e9894,
         type: 3}
       propertyPath: managerPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 286281843932116360, guid: 3fd1d8b0e71b8c240901dd8302c47e20,
+        type: 3}
     - target: {fileID: 4626805224794185743, guid: 32ece377cacd8e64b9ce62bea05e9894,
         type: 3}
       propertyPath: m_RootOrder

@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "571df673",
         "name": "com.DefaultCompany.ThrashThrower",
-        "processId": 31461,
+        "processId": 23951,
         "exited": false
     },
     "m_SelectedPriority": 4,
@@ -72,6 +72,30 @@
             "deviceId": "571df673",
             "name": "com.DefaultCompany.ThrashThrower",
             "processId": 31461,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.DefaultCompany.ThrashThrower",
+            "processId": 12274,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.DefaultCompany.ThrashThrower",
+            "processId": 15328,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.DefaultCompany.ThrashThrower",
+            "processId": 17549,
+            "exited": false
+        },
+        {
+            "deviceId": "571df673",
+            "name": "com.DefaultCompany.ThrashThrower",
+            "processId": 23951,
             "exited": false
         }
     ],

@@ -9,12 +9,16 @@ public class OptionsMenu : Singleton<OptionsMenu>
     protected override void Awake()
     {
         base.Awake();
-        AddButtonActions();
     }
 
+    private void Start()
+    {
+        AddButtonActions();
+    }
     private void AddButtonActions()
     {
         backButton.onClick.AddListener(UIManager.Instance.BackFromOptions);
+        backButton.onClick.AddListener(SoundManager.Instance.ButtonPressed);
     }
 
 }

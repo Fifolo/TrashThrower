@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f06bd11be27fee4588fdd66fc19755b, type: 3}
   m_Name: DefaultBad
   m_EditorClassIdentifier: 
-  health: 100
+  health: 400
   roamingRange: 10
-  runningSpeed: 5
-  pointsOnDeath: 10
+  runningSpeed: 6
+  pointsOnDeath: 15
+  NEW_PATH_CD: 1
+  CAN_REACH_POSITION_CD: 0.2
+  DISTANCE_CHECK_CD: 0.4
+  FOLLOW_CD: 1
   dropsTrash: 0
   dropRate: 13.2
   initialWaitTime: 3.08

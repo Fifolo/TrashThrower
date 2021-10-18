@@ -13,12 +13,47 @@ MonoBehaviour:
   m_Name: RaycastPistolData
   m_EditorClassIdentifier: 
   maxAmmo: 10
-  shootingRate: 0.5
-  damage: 30
+  shootingRate: 1.4
+  damage: 70
   reloadTime: 1
+  critChance: 0.5
+  critMultiplier: 3
   fireClip: {fileID: 8300000, guid: 718740d3edc3925409cb9b987a372c32, type: 3}
   reloadingClip: {fileID: 8300000, guid: c35c68546816ff9428f63b8dfd02d740, type: 3}
   muzzleFlash: {fileID: 264589168118401068, guid: 06d9a056e89b25b4db61a95c53aeacad,
     type: 3}
   steam: {fileID: 264589168118401068, guid: b19802d3c6f2d1f47b421f63d00fa115, type: 3}
   raycastRange: 100
+  damafeFalloffCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.12916565
+      value: 1.0024338
+      inSlope: -1.1650418
+      outSlope: -1.1650418
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.28105882
+      value: 0.8254719
+      inSlope: -2.6727252
+      outSlope: -2.6727252
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.060765903
+    - serializedVersion: 3
+      time: 1.0083618
+      value: 0.0072898865
+      inSlope: -1.1249534
+      outSlope: -1.1249534
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

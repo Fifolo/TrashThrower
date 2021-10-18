@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: ProjectileRifleData
   m_EditorClassIdentifier: 
   maxAmmo: 45
-  shootingRate: 0.2
-  damage: 15
-  reloadTime: 1.5
+  shootingRate: 0.3
+  damage: 20
+  reloadTime: 2.04
+  critChance: 0.232
+  critMultiplier: 1.16
   fireClip: {fileID: 8300000, guid: 577cb100552dc7044853df3840905615, type: 3}
   reloadingClip: {fileID: 8300000, guid: 526b78049a014dc44aa04587f0e6ea40, type: 3}
-  projectileSpeed: 33.9
+  muzzleFlash: {fileID: 0}
+  steam: {fileID: 0}
+  projectileSpeed: 39

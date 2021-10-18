@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f06bd11be27fee4588fdd66fc19755b, type: 3}
   m_Name: Dropper
   m_EditorClassIdentifier: 
-  health: 100
+  health: 300
   roamingRange: 10
-  runningSpeed: 8
-  pointsOnDeath: 5
+  runningSpeed: 4
+  pointsOnDeath: 10
   NEW_PATH_CD: 1
   CAN_REACH_POSITION_CD: 0.2
   DISTANCE_CHECK_CD: 0.4
   FOLLOW_CD: 1
   dropsTrash: 1
-  dropRate: 10
-  initialWaitTime: 1.64
-  dropChance: 0.807
+  dropRate: 7.9
+  initialWaitTime: 2.01
+  dropChance: 0.8

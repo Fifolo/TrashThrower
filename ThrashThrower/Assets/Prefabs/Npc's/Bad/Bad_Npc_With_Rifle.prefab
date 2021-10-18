@@ -63,7 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 2267281831342873280}
   reloadTimeMultiplier: 2
-  range: 10
+  range: 15
   gun: {fileID: 3802737898061364276, guid: f1b8cb7b79b80864292423be8de3058d, type: 3}
   shootOffset: 0.54
 --- !u!195 &3929617694787522969

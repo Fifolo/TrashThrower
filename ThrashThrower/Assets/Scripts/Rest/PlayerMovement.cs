@@ -18,27 +18,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     protected CharacterController characterController;
     protected Transform characterTransform;
-    public float RotationSpeed
-    {
-        get { return playerData.rotationSpeed; }
-        set
-        {
-            if (value > 1 && value < 350)
-            {
-                playerData.rotationSpeed = value;
-            }
-            else Debug.LogWarning($"Rotation speed not changed, {value} is not appropraite");
-        }
-    }
+
+    private float currentMoveSpeed = 0;
     public float MovementSpeed
     {
-        get { return playerData.movementSpeed; }
+        get { return currentMoveSpeed; }
         set
         {
             if (value > 1 && value < 100)
             {
-                //Debug.Log($"Previous speed = {movementSpeed}, new speed = {value}");
-                playerData.movementSpeed = value;
+                currentMoveSpeed = value;
             }
             else Debug.LogWarning($"Movement speed not changed, {value} is not appropraite");
         }
@@ -67,6 +56,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
     #region Methods
     private void GettingReferences()
     {
+        currentMoveSpeed = playerData.movementSpeed;
         characterController = GetComponent<CharacterController>();
         characterTransform = transform;
         groundCheck = characterTransform.Find("GroundCheck");

@@ -9,16 +9,19 @@ public class MainMenu : Singleton<MainMenu>
     [SerializeField] private Button optionsButton;
     [SerializeField] private Button exitButton;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
         AddButtonActions();
     }
-
     private void AddButtonActions()
     {
         playButton.onClick.AddListener(GameManager.Instance.StartGame);
+        playButton.onClick.AddListener(SoundManager.Instance.ButtonPressed);
+
         optionsButton.onClick.AddListener(UIManager.Instance.LoadOptions);
+        optionsButton.onClick.AddListener(SoundManager.Instance.ButtonPressed);
+
         exitButton.onClick.AddListener(GameManager.Instance.ExitGame);
+        exitButton.onClick.AddListener(SoundManager.Instance.ButtonPressed);
     }
 }

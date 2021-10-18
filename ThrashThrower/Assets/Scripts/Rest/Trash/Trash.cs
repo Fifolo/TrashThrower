@@ -15,9 +15,9 @@ public class Trash : MonoBehaviour
     public static event ContaminationEvent OnMaxContaminationDrop;
 
     public static float CurrentContamination = 0f;
-    public static float MaxContamination = 1000f;
 
-    public delegate void TrashEvent(float trashPollution);
+    public static float MaxContamination = 500f;
+
     public float TrashContamintation { get { return trashContamination; } }
     public TrashType Trash_Type { get { return trashType; } }
 
