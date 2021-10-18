@@ -1,6 +1,8 @@
 # ThrashThrower
 Repository for my ThrashThrower mobile game.
 
+
+
 Assets used:
 - https://www.kenney.nl/assets/onscreen-controls
 - https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
@@ -12,3 +14,4 @@ Assets used:
 - https://assetstore.unity.com/packages/3d/props/exterior/plastic-trash-bins-160771
 - https://assetstore.unity.com/packages/audio/sound-fx/ui-sound-effects-collection-pack-2-buttons-27803#content
 - https://opengameart.org/content/reggae
+- https://www.mixamo.com/#/
